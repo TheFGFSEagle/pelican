@@ -9,12 +9,17 @@ add_executable(pelican
 	thumbnailmanager.cxx
 	uiloader.cxx
 )
+target_include_directories(
+	pelican
+	PUBLIC ${FREEIMAGEPLUS_INCLUDE_DIRS}
+)
 target_link_libraries(
 	pelican
 	Qt::Widgets
 	argparse
 	easyqt
 	pugixml
+	${FREEIMAGEPLUS_LIBRARIES}
 )
 
 install(
