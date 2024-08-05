@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>mainwindow</class>
+	<widget class="pelican::MainWindow" name="pelican::MainWindow">
+		<widget class="pelican::MenuBar" name="pelican::GlobalMenuBar">
+		</widget>
+		<widget class="QWidget" name="MainWidget">
+			<layout class="QVBoxLayout" name="MainLayout">
+				<item>
+					<widget class="QSplitter" name="MainSplitter">
+						<widget class="QWidget">
+							<property name="geometry">
+								<rect>
+									<width>1000</width>
+								</rect>
+							</property>
+							<layout class="QVBoxLayout">
+								<item>
+									<widget class="QScrollArea">
+										<property name="widgetResizable">
+											<bool>true</bool>
+										</property>
+										<widget class="pelican::MediaView" name="pelican::MediaView">
+										</widget>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+						<widget class="pelican::MediaInfoPane" name="pelican::MediaInfoPane">
+						</widget>
+					</widget>
+				</item>
+			</layout>
+		</widget>
+		<widget class="QStatusBar" name="StatusBar">
+		</widget>
+	</widget>
+	<resources/>
+</ui>
+

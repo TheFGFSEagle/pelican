@@ -1,0 +1,9 @@
+[submodule "3rdparty/argparse"]
+	path = 3rdparty/argparse
+	url = https://github.com/p-ranav/argparse
+[submodule "3rdparty/easyqt"]
+	path = 3rdparty/easyqt
+	url = https://github.com/TheFGFSEagle/easyqt
+[submodule "3rdparty/pugixml"]
+	path = 3rdparty/pugixml
+	url = https://github.com/zeux/pugixml
