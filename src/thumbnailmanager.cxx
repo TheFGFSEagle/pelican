@@ -40,6 +40,7 @@ namespace pelican {
 	
 	void ThumbnailManager::generateThumbnail(Media* media, std::filesystem::path thumbnailPath, int width, int height) {
 		std::string mediaPath = media->path().concat(media->suffix(".jpg")).string();
+		LOG(DEBUG, "Generating thumbnail for '" << mediaPath << "' at '" << thumbnailPath << "'");
 		fipImage originalImage;
 		bool success = originalImage.load(mediaPath.c_str());
 		if (!success) {
