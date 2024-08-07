@@ -10,14 +10,16 @@
 #include "application.hxx"
 #include "mediaview.hxx"
 
+#define THUMBNAIL_SIZE 128
+
 namespace pelican {
 	MediaViewEntry::MediaViewEntry(MediaPtr media):
 			_media(media)
 	{
-		setFixedWidth(150);
+		setFixedWidth(THUMBNAIL_SIZE + 10);
 		setLayout(&_layout);
 		QLabel* thumbnailLabel = new QLabel;
-		thumbnailLabel->setPixmap(media->thumbnail(140, 140));
+		thumbnailLabel->setPixmap(media->thumbnail(THUMBNAIL_SIZE, THUMBNAIL_SIZE));
 		_layout.addWidget(thumbnailLabel, 0, 0);
 		_layout.setAlignment(thumbnailLabel, Qt::AlignCenter);
 		QLabel* nameLabel = new QLabel(media->filename().c_str());

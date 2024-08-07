@@ -13,10 +13,15 @@
 namespace pelican {
 	class ThumbnailManager: public Singleton<ThumbnailManager> {
 		public:
-			ThumbnailManager() {};
+			ThumbnailManager();
 		
 			QPixmap thumbnail(Media* media, int width, int height);
 			QPixmap thumbnail(MediaPtr media, int width, int height) { return thumbnail(media.get(), width, height); };
+		
+		private:
+			void generateThumbnail(Media* media, std::filesystem::path path, int width, int height);
+			
+			std::filesystem::path _thumbnailDirectory;
 	};
 }
 
