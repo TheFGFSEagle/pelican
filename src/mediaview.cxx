@@ -1,9 +1,6 @@
-#include <QDir>
 #include <QImage>
-#include <QImageReader>
-#include <QLabel>
 #include <QPixmap>
-#include <QVariant>
+#include <QThreadPool>
 
 #include <easyqt/logging.hxx>
 
@@ -18,13 +15,19 @@ namespace pelican {
 	{
 		setFixedWidth(THUMBNAIL_SIZE + 10);
 		setLayout(&_layout);
-		QLabel* thumbnailLabel = new QLabel;
-		thumbnailLabel->setPixmap(media->thumbnail(THUMBNAIL_SIZE, THUMBNAIL_SIZE));
-		_layout.addWidget(thumbnailLabel, 0, 0);
-		_layout.setAlignment(thumbnailLabel, Qt::AlignCenter);
-		QLabel* nameLabel = new QLabel(media->filename().c_str());
-		_layout.addWidget(nameLabel, 1, 0);
-		_layout.setAlignment(nameLabel, Qt::AlignCenter);
+		_thumbnailLabel.setFixedSize(THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+		_thumbnailLabel.setPixmap(QIcon::fromTheme("image-jpg").pixmap(THUMBNAIL_SIZE, THUMBNAIL_SIZE));
+		_layout.addWidget(&_thumbnailLabel, 0, 0);
+		_layout.setAlignment(&_thumbnailLabel, Qt::AlignCenter);
+		_nameLabel.setText(media->filename().c_str());
+		_layout.addWidget(&_nameLabel, 1, 0);
+		_layout.setAlignment(&_nameLabel, Qt::AlignCenter);
+		
+		QThreadPool::globalInstance()->start(std::bind(&MediaViewEntry::showThumbnail, this));
+	}
+	
+	void MediaViewEntry::showThumbnail() {
+		_thumbnailLabel.setPixmap(_media->thumbnail(THUMBNAIL_SIZE, THUMBNAIL_SIZE));
 	}
 	
 	MediaView::MediaView() {
@@ -37,13 +40,8 @@ namespace pelican {
 			delete item->widget();
 		}
 
-		int i = 0;
 		for (const auto& media: Application::instance()->medias()) {
-			if (i > 10) {
-				break;
-			}
 			_layout.addWidget(new MediaViewEntry(media));
-			i++;
 		}
 	}
 }

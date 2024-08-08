@@ -1,8 +1,10 @@
 #ifndef PELICAN_MEDIALIST_HXX
 #define PELICAN_MEDIALIST_HXX
 
-#include <QWidget>
 #include <QFileSystemWatcher>
+#include <QGridLayout>
+#include <QLabel>
+#include <QWidget>
 
 #include <filesystem>
 #include <set>
@@ -19,9 +21,13 @@ namespace pelican {
 		
 		public:
 			MediaViewEntry(MediaPtr media);
+			void showThumbnail();
 		
 		private:
 			QGridLayout _layout;
+			QLabel _thumbnailLabel;
+			QLabel _nameLabel;
+			
 			MediaPtr _media;
 	};
 	
