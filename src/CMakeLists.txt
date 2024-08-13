@@ -1,5 +1,6 @@
 add_executable(pelican
 	application.cxx
+	commands.cxx
 	main.cxx
 	media.cxx
 	mainwindow.cxx

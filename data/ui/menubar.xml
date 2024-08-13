@@ -9,5 +9,18 @@
 			<shortcut>Ctrl+q</shortcut>
 		</menuitem>
 	</menu>
+	<menu>
+		<label>Edit</label>
+		<menuitem>
+			<label>Select all medias</label>
+			<command>mediaview-select-all</command>
+			<shortcut>Ctrl+a</shortcut>
+		</menuitem>
+		<menuitem>
+			<label>Invert selection</label>
+			<command>mediaview-invert-selection</command>
+			<shortcut>Crl+i</shortcut>
+		</menuitem>
+	</menu>
 </menubar>
 

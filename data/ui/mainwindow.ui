@@ -11,7 +11,7 @@
 						<widget class="QWidget">
 							<property name="geometry">
 								<rect>
-									<width>1000</width>
+									<width>1050</width>
 								</rect>
 							</property>
 							<layout class="QVBoxLayout">

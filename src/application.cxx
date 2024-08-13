@@ -6,6 +6,7 @@
 #include <argparse/argparse.hpp>
 
 #include "application.hxx"
+#include "commands.hxx"
 #include "config.hxx"
 #include "logging.hxx"
 #include "mainwindow.hxx"
@@ -28,6 +29,8 @@ namespace pelican {
 		
 		easyqt::Logger::instance()->setLogLevel(arguments.get<std::string>("--log-level"));
 		LOG(INFO, "log level: " << easyqt::Logger::instance()->logLevel());
+		
+		addCommands();
 	}
 
 	void Application::initUI() {
