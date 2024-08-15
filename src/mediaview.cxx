@@ -1,6 +1,7 @@
 #include <ranges>
 
 #include <QImage>
+#include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
 #include <QRect>
@@ -11,6 +12,7 @@
 #include <easyqt/logging.hxx>
 
 #include "application.hxx"
+#include "mediainfopane.hxx"
 #include "mediaview.hxx"
 
 #define THUMBNAIL_SIZE 128
@@ -38,6 +40,17 @@ namespace pelican {
 	
 	void MediaViewEntry::showThumbnail() {
 		_thumbnailLabel.setPixmap(_media->thumbnail(THUMBNAIL_SIZE, THUMBNAIL_SIZE));
+	}
+	
+	void MediaViewEntry::deleteFiles() {
+		bool success = true;
+		for (const auto& path: _media->paths()) {
+			LOG(INFO, "Deleting " << std::quoted(path.string()));
+			success &= std::filesystem::remove(path);
+		}
+		if (!success) {
+			LOG(ERROR, "Some files could not be deleted");
+		}
 	}
 	
 	void MediaViewEntry::paintEvent(QPaintEvent *event) {
@@ -141,6 +154,11 @@ namespace pelican {
 			_selectionStartEntry->setSelected(true);
 			entry->setSelected(true);
 		}
+		if (_selectionStartEntry) {
+			MediaInfoPane::instance()->setMedia(_selectionStartEntry->media());
+		} else {
+			MediaInfoPane::instance()->setMedia(nullptr);
+		}
 	}
 	
 	void MediaView::selectAll() {
@@ -215,6 +233,35 @@ namespace pelican {
 				invertSelection();
 			}
 		} else if (event->key() == Qt::Key_Delete) {
+			std::vector<MediaViewEntry*> selected;
+			for (const auto& mediaEntry: _mediaEntries) {
+				if (mediaEntry->selected()) {
+					selected.push_back(mediaEntry);
+				}
+			}
+			if (selected.size() == 0) {
+				return;
+			}
+			
+			std::ostringstream question;
+			question << "Are you sure you want to delete ";
+			if (selected.size() == 1) {
+				question << std::quoted(selected[0]->media()->filename()) << " ?";
+			} else {
+				question << selected.size() << " medias ?";
+			}
+			QMessageBox::StandardButton reply = QMessageBox::question(
+				this,
+				"Deleted files cannot be recovered",
+				question.str().c_str(),
+				QMessageBox::Yes | QMessageBox::Cancel
+			);
+			
+			if (reply == QMessageBox::Yes) {
+				for (const auto& entry: selected) {
+					entry->deleteFiles();
+				}
+			}
 		}
 
 		QWidget::keyPressEvent(event);

@@ -29,6 +29,9 @@ namespace pelican {
 			
 			MediaViewEntry(MediaPtr media);
 			void showThumbnail();
+			void deleteFiles();
+			bool selected() { return _selected; };
+			MediaPtr media() { return _media; };
 		
 			virtual void paintEvent(QPaintEvent* event) override;
 			virtual void mousePressEvent(QMouseEvent* event) override;
@@ -38,7 +41,6 @@ namespace pelican {
 		
 		protected:
 			void setSelected(bool selected);
-			bool selected() { return _selected; };
 		
 		private:
 			QGridLayout _layout;

@@ -41,5 +41,13 @@ namespace pelican {
 	std::filesystem::path Media::path() {
 		return directory() / filename();
 	}
+	
+	std::vector<std::filesystem::path> Media::paths() {
+		std::vector<std::filesystem::path> v;
+		for (const auto& suffix: _suffixes) {
+			v.push_back(path().concat(suffix));
+		}
+		return v;
+	}
 }
 

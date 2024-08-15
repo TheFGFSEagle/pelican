@@ -40,8 +40,10 @@ namespace pelican {
 			std::filesystem::path directory() { return _directory; };
 			// @return Name of this media (without extension)
 			std::string filename() { return _filename; };
-			// @return All available suffixes (file extensions) of this media. There is always at least one suffix
+			// @return Suffixes (file extensions) of all files asociated with this media. There is always at least one suffix
 			std::set<std::string> suffixes() { return _suffixes; };
+			// @return Paths to all files associated with this media.
+			std::vector<std::filesystem::path> paths();
 			
 			// @description Get an available suffix (file extension) for this media
 			// @param preferred Which file extension is preferred - if available, the suffix for that extension will be returned.
