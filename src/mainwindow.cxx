@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QSplitter>
 #include <QVBoxLayout>
 
 #include <iostream>
@@ -21,6 +22,9 @@ namespace pelican {
 	void MainWindow::initUI() {
 		setWindowTitle("Pelican");
 		loadWidgetFromFile<MainWindow>("res:ui/mainwindow.ui");
+		QSplitter* mainSplitter = findChild<QSplitter*>("MainSplitter");
+		mainSplitter->setCollapsible(0, false);
+		mainSplitter->setCollapsible(1, false);
 		//mainWidget = new QWidget();
 		//QVBoxLayout mainLayout;
 		//mainWidget->setLayout(&mainLayout);

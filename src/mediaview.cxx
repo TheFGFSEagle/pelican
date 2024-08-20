@@ -79,9 +79,7 @@ namespace pelican {
 					op = MediaView::AddToSelection;
 				}
 			}
-			if (!_selected) {
-				MediaView::instance()->selectEntry(this, op);
-			}
+			MediaView::instance()->selectEntry(this, op);
 		}
 	}
 	
@@ -166,11 +164,23 @@ namespace pelican {
 			mediaEntry->setSelected(true);
 		}
 		_selectionStartEntry = nullptr;
+		MediaInfoPane::instance()->setMedia(nullptr);
 	}
 	
 	void MediaView::invertSelection() {
+		std::vector<MediaViewEntry*> selected;
 		for (const auto& mediaEntry: _mediaEntries) {
 			mediaEntry->setSelected(!mediaEntry->selected());
+			if (mediaEntry->selected()) {
+				selected.push_back(mediaEntry);
+			}
+		}
+		if (selected.size() == 1) {
+			MediaInfoPane::instance()->setMedia(selected[0]->media());
+			_selectionStartEntry = selected[0];
+		} else {
+			MediaInfoPane::instance()->setMedia(nullptr);
+			_selectionStartEntry = nullptr;
 		}
 	}
 	
@@ -178,6 +188,7 @@ namespace pelican {
 		for (const auto& mediaEntry: _mediaEntries) {
 			mediaEntry->setSelected(false);
 		}
+		MediaInfoPane::instance()->setMedia(nullptr);
 	}
 	
 	void MediaView::mousePressEvent(QMouseEvent* event) {
@@ -219,7 +230,7 @@ namespace pelican {
 			}
 		} else if (event->key() == Qt::Key_Right) {
 			auto it = std::ranges::find(_mediaEntries, _selectionStartEntry);
-			if (it != _mediaEntries.end()) {
+			if (it < --_mediaEntries.end()) {
 				if (event->modifiers() == Qt::NoModifier) {
 					selectEntry(*(++it), ReplaceSelection);
 				} else if (event->modifiers() & Qt::ShiftModifier) {

@@ -1,9 +1,10 @@
 add_executable(pelican
 	application.cxx
 	commands.cxx
+	exifutils.cxx
 	main.cxx
-	media.cxx
 	mainwindow.cxx
+	media.cxx
 	mediainfopane.cxx
 	mediaview.cxx
 	menubar.cxx
@@ -12,15 +13,20 @@ add_executable(pelican
 )
 target_include_directories(
 	pelican
-	PUBLIC ${FREEIMAGEPLUS_INCLUDE_DIRS}
+	PUBLIC
+		${FREEIMAGEPLUS_INCLUDE_DIRS}
+		${PYSTRING_INCLUDE_DIRS}
 )
 target_link_libraries(
 	pelican
 	Qt::Widgets
 	argparse
 	easyqt
+	exiv2lib
+	fmt
 	pugixml
 	${FREEIMAGEPLUS_LIBRARIES}
+	${PYSTRING_LIBRARIES}
 )
 
 install(

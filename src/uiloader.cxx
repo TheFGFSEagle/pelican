@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QSplitter>
 
 #include <easyqt/logging.hxx>
 
@@ -10,6 +11,7 @@
 
 namespace pelican {
 	QWidget* UiLoader::createWidget(const QString& widgetName, QWidget* parentWidget, const QString& name) {
+		LOG(DEBUG, "pelican::UiLoader::createWidget(widgetName=" << std::quoted(widgetName.toStdString()) << ", name=" << std::quoted(name.toStdString()) << ")");
 		QWidget* w;
 		if (widgetName == "pelican::MenuBar") {
 			w = MenuBar::instance(name.toStdString());
@@ -20,7 +22,7 @@ namespace pelican {
 		} else if (widgetName == "pelican::MediaInfoPane") {
 			w = MediaInfoPane::instance();
 		} else {
-			return easyqt::UiLoader::createWidget(widgetName, parentWidget, name);
+			w = easyqt::UiLoader::createWidget(widgetName, parentWidget, name);
 		}
 		if (!w) {
 			LOG(ERROR, "Unable to create widgets of type '"<< widgetName.toStdString() << "' with name '" << name.toStdString() << "' !")

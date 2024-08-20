@@ -8,25 +8,19 @@
 			<layout class="QVBoxLayout" name="MainLayout">
 				<item>
 					<widget class="QSplitter" name="MainSplitter">
-						<widget class="QWidget">
-							<property name="geometry">
-								<rect>
-									<width>1050</width>
-								</rect>
+						<widget class="QScrollArea">
+							<property name="widgetResizable">
+								<bool>true</bool>
 							</property>
-							<layout class="QVBoxLayout">
-								<item>
-									<widget class="QScrollArea">
-										<property name="widgetResizable">
-											<bool>true</bool>
-										</property>
-										<widget class="pelican::MediaView" name="pelican::MediaView">
-										</widget>
-									</widget>
-								</item>
-							</layout>
+							<widget class="pelican::MediaView" name="pelican::MediaView">
+							</widget>
+						</widget>
+						<widget class="pelican::MediaShowArea">
 						</widget>
 						<widget class="pelican::MediaInfoPane" name="pelican::MediaInfoPane">
+							<property name="widgetResizable">
+								<bool>true</bool>
+							</property>
 						</widget>
 					</widget>
 				</item>
