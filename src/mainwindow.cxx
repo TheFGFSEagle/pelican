@@ -7,6 +7,8 @@
 #include <iostream>
 
 #include "application.hxx"
+#include "mediainfopane.hxx"
+#include "mediaview.hxx"
 #include "menubar.hxx"
 #include "uiloader.hxx"
 
@@ -24,7 +26,9 @@ namespace pelican {
 		loadWidgetFromFile<MainWindow>("res:ui/mainwindow.ui");
 		QSplitter* mainSplitter = findChild<QSplitter*>("MainSplitter");
 		mainSplitter->setCollapsible(0, false);
-		mainSplitter->setCollapsible(1, false);
+		mainSplitter->setCollapsible(2, false);
+		
+		mainSplitter->setStretchFactor(1, 1);
 		//mainWidget = new QWidget();
 		//QVBoxLayout mainLayout;
 		//mainWidget->setLayout(&mainLayout);

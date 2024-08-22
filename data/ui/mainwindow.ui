@@ -8,14 +8,15 @@
 			<layout class="QVBoxLayout" name="MainLayout">
 				<item>
 					<widget class="QSplitter" name="MainSplitter">
-						<widget class="QScrollArea">
+						<widget class="pelican::MediaView" name="pelican::MediaView">
 							<property name="widgetResizable">
 								<bool>true</bool>
 							</property>
-							<widget class="pelican::MediaView" name="pelican::MediaView">
-							</widget>
 						</widget>
 						<widget class="pelican::MediaShowArea">
+							<property name="widgetResizable">
+								<bool>true</bool>
+							</property>
 						</widget>
 						<widget class="pelican::MediaInfoPane" name="pelican::MediaInfoPane">
 							<property name="widgetResizable">

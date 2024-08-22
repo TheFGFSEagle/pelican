@@ -7,12 +7,14 @@
 #include <QRect>
 #include <QRubberBand>
 #include <QSize>
+#include <QScrollBar>
 #include <QThreadPool>
 
 #include <easyqt/logging.hxx>
 
 #include "application.hxx"
 #include "mediainfopane.hxx"
+#include "mediashowarea.hxx"
 #include "mediaview.hxx"
 
 #define THUMBNAIL_SIZE 128
@@ -85,6 +87,13 @@ namespace pelican {
 	
 	void MediaViewEntry::mouseReleaseEvent(QMouseEvent* event) {}
 	
+	void MediaViewEntry::mouseDoubleClickEvent(QMouseEvent* event) {
+		if (event->modifiers() == Qt::NoModifier) {
+			MediaShowArea::instance()->show();
+			MediaShowArea::instance()->setMedia(_media);
+		}
+	}
+	
 	void MediaViewEntry::enterEvent(QEvent* event) {
 		update();
 	}
@@ -98,11 +107,13 @@ namespace pelican {
 		update();
 	}
 	
-	MediaView::MediaView():
-			_rubberBand(QRubberBand::Rectangle, this)
-	{
-	
-		setLayout(&_layout);
+	MediaView::MediaView() {
+		QWidget* widget = new QWidget(this);
+		widget->setLayout(&_layout);
+		setWidget(widget);
+		_rubberBand = new QRubberBand(QRubberBand::Rectangle, widget);
+		
+		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		setFocusPolicy(Qt::ClickFocus);
 	}
 	
@@ -121,14 +132,42 @@ namespace pelican {
 		}
 	}
 	
+	QSize MediaView::sizeHint() const {
+		if (MediaShowArea::instance()->isVisible()) {
+			return minimumSizeHint();
+		}
+		QSize hint = _layout.sizeHint();
+		hint.setWidth(
+			hint.width() +
+			2 * frameWidth() +
+			verticalScrollBar()->size().width()
+		);
+		return hint;
+	}
+	
+	QSize MediaView::minimumSizeHint() const {
+		QSize hint = _layout.minimumSize();
+		hint.setWidth(
+			hint.width() +
+			2 * frameWidth() +
+			verticalScrollBar()->size().width()
+		);
+		return hint;
+	}
+	
 	void MediaView::selectEntry(MediaViewEntry* entry, SelectionOperation op) {
 		if (op == ReplaceSelection) {
 			clearSelection();
 			entry->setSelected(true);
 			_selectionStartEntry = entry;
+			ensureWidgetVisible(entry, 0, 0);
+			if (MediaShowArea::instance()->isVisible()) {
+				MediaShowArea::instance()->setMedia(entry->media());
+			}
 		} else if (op == AddToSelection) {
 			entry->setSelected(true);
 			_selectionStartEntry = entry;
+			ensureWidgetVisible(entry, 0, 0);
 		} else if (op == RemoveFromSelection) {
 			entry->setSelected(false);
 			_selectionStartEntry = nullptr;
@@ -147,10 +186,13 @@ namespace pelican {
 				}
   				for (; selectionStartEntryIt != entryIt; selectionStartEntryIt++) {
 					(*selectionStartEntryIt)->setSelected(true);
+					ensureWidgetVisible(*selectionStartEntryIt, 0, 0);
 				}
 			}
 			_selectionStartEntry->setSelected(true);
+			ensureWidgetVisible(_selectionStartEntry, 0, 0);
 			entry->setSelected(true);
+			ensureWidgetVisible(entry, 0, 0);
 		}
 		if (_selectionStartEntry) {
 			MediaInfoPane::instance()->setMedia(_selectionStartEntry->media());
@@ -178,6 +220,7 @@ namespace pelican {
 		if (selected.size() == 1) {
 			MediaInfoPane::instance()->setMedia(selected[0]->media());
 			_selectionStartEntry = selected[0];
+			ensureWidgetVisible(_selectionStartEntry, 0, 0);
 		} else {
 			MediaInfoPane::instance()->setMedia(nullptr);
 			_selectionStartEntry = nullptr;
@@ -191,31 +234,40 @@ namespace pelican {
 		MediaInfoPane::instance()->setMedia(nullptr);
 	}
 	
+	QPoint MediaView::scrollPos() {
+		return QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value());
+	}
+	
 	void MediaView::mousePressEvent(QMouseEvent* event) {
 		clearSelection();
 		
 		_rubberBandOrigin = event->pos();
-		_rubberBand.setGeometry(QRect(_rubberBandOrigin, QSize()));
-		_rubberBand.show();
-		QWidget::mousePressEvent(event);
+		_rubberBandOrigin += scrollPos();
+		_rubberBand->setGeometry(QRect(_rubberBandOrigin, QSize()));
+		_rubberBand->show();
+		QScrollArea::mousePressEvent(event);
 	}
 
 	void MediaView::mouseMoveEvent(QMouseEvent* event) {
-		_rubberBand.setGeometry(QRect(_rubberBandOrigin, event->pos()).normalized());
-		
-		QWidget* widget;
-		bool selected = false;
-		for (auto it = _mediaEntries.begin(); it != _mediaEntries.end(); it++) {
-			selected = (*it)->geometry().intersects(_rubberBand.geometry());
-			(*it)->setSelected(selected);
+		if (_rubberBand->isVisible()) {
+			_rubberBand->setGeometry(QRect(_rubberBandOrigin, event->pos() + scrollPos()).normalized());
+			
+			bool selected = false;
+			for (auto it = _mediaEntries.begin(); it != _mediaEntries.end(); it++) {
+				selected = (*it)->geometry().intersects(_rubberBand->geometry());
+				(*it)->setSelected(selected);
+				if (selected) {
+					ensureWidgetVisible(*it, 0, 0);
+				}
+			}
 		}
 		
-		QWidget::mouseMoveEvent(event);
+		QScrollArea::mouseMoveEvent(event);
 	}
 
 	void MediaView::mouseReleaseEvent(QMouseEvent* event) {
-		_rubberBand.hide();
-		QWidget::mouseReleaseEvent(event);
+		_rubberBand->hide();
+		QScrollArea::mouseReleaseEvent(event);
 	}
 	
 	void MediaView::keyPressEvent(QKeyEvent* event) {
@@ -275,7 +327,7 @@ namespace pelican {
 			}
 		}
 
-		QWidget::keyPressEvent(event);
+		QScrollArea::keyPressEvent(event);
 	}
 }
 

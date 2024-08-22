@@ -6,6 +6,7 @@ add_executable(pelican
 	mainwindow.cxx
 	media.cxx
 	mediainfopane.cxx
+	mediashowarea.cxx
 	mediaview.cxx
 	menubar.cxx
 	thumbnailmanager.cxx

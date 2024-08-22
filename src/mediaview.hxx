@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QPoint>
 #include <QRubberBand>
-#include <QWidget>
+#include <QScrollArea>
 
 #include <filesystem>
 #include <set>
@@ -36,6 +36,7 @@ namespace pelican {
 			virtual void paintEvent(QPaintEvent* event) override;
 			virtual void mousePressEvent(QMouseEvent* event) override;
 			virtual void mouseReleaseEvent(QMouseEvent* event) override;
+			virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 			virtual void enterEvent(QEvent* event) override;
 			virtual void leaveEvent(QEvent* event) override;
 		
@@ -51,7 +52,7 @@ namespace pelican {
 			bool _selected = {false};
 	};
 	
-	class MediaView: public Singleton<MediaView, QWidget> {
+	class MediaView: public Singleton<MediaView, QScrollArea> {
 		Q_OBJECT
 		
 		public:
@@ -74,15 +75,18 @@ namespace pelican {
 			virtual void mouseMoveEvent(QMouseEvent* event) override;
 			virtual void mouseReleaseEvent(QMouseEvent* event) override;
 			virtual void keyPressEvent(QKeyEvent* event) override;
+			virtual QSize sizeHint() const override;
+			virtual QSize minimumSizeHint() const override;
 		
 		protected:
+			QPoint scrollPos();
 			void selectEntry(MediaViewEntry* entry, SelectionOperation op);
 		
 		private:
 			easyqt::FlowLayout _layout;
 			std::vector<MediaViewEntry*> _mediaEntries;
 			MediaViewEntry* _selectionStartEntry;
-			QRubberBand _rubberBand;
+			QRubberBand* _rubberBand;
 			QPoint _rubberBandOrigin;
 	};
 } 
