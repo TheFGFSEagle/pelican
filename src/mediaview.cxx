@@ -280,6 +280,7 @@ namespace pelican {
 					selectEntry(*(--it), AddToSelection);
 				}
 			}
+			return;
 		} else if (event->key() == Qt::Key_Right) {
 			auto it = std::ranges::find(_mediaEntries, _selectionStartEntry);
 			if (it < --_mediaEntries.end()) {
@@ -289,6 +290,29 @@ namespace pelican {
 					selectEntry(*(++it), AddToSelection);
 				}
 			}
+			return;
+		} else if (event->key() == Qt::Key_Up) {
+			auto it = std::ranges::find(_mediaEntries, _selectionStartEntry);
+			if (std::distance(_mediaEntries.begin(), it) >= _layout.columns()) {
+				std::advance(it, -_layout.columns());
+				if (event->modifiers() == Qt::NoModifier) {
+					selectEntry(*it, ReplaceSelection);
+				} else if (event->modifiers() & Qt::ShiftModifier) {
+					selectEntry(*it, AddRangeToSelection);
+				}
+			}
+			return;
+		} else if (event->key() == Qt::Key_Down) {
+			auto it = std::ranges::find(_mediaEntries, _selectionStartEntry);
+			if (std::distance(it, _mediaEntries.end()) > _layout.columns()) {
+				std::advance(it, _layout.columns());
+				if (event->modifiers() == Qt::NoModifier) {
+					selectEntry(*it, ReplaceSelection);
+				} else if (event->modifiers() & Qt::ShiftModifier) {
+					selectEntry(*it, AddRangeToSelection);
+				}
+			}
+			return;
 		} else if (event->modifiers() & Qt::ControlModifier) {
 			if (event->key() == Qt::Key_A) {
 				selectAll();
