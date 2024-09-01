@@ -22,5 +22,26 @@
 			<shortcut>Crl+i</shortcut>
 		</menuitem>
 	</menu>
+	<menu>
+		<label>View</label>
+		<menu>
+			<label>Media</label>
+			<menuitem>
+				<label>Zoom in</label>
+				<command>mediashowarea-scale-increase</command>
+				<shortcut>+</shortcut>
+			</menuitem> 
+			<menuitem>
+				<label>Zoom out</label>
+				<command>mediashowarea-scale-decrease</command>
+				<shortcut>-</shortcut>
+			</menuitem> 
+			<menuitem>
+				<label>Fit to screen</label>
+				<command>mediashowarea-scale-fit</command>
+				<shortcut>Ctrl+0</shortcut>
+			</menuitem>
+		</menu>
+	</menu> 
 </menubar>
 

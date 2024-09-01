@@ -1,4 +1,5 @@
 #include "commands.hxx"
+#include "mediashowarea.hxx"
 #include "mediaview.hxx"
 
 namespace pelican {
@@ -10,10 +11,27 @@ namespace pelican {
 		MediaViewInvertSelectionCommand, "mediaview-invert-selection",
 		MediaView::instance()->invertSelection()
 	);
+	EASYQTCOMMAND_GEN_IMPL(
+		MediaShowAreaScaleIncreaseCommand, "mediashowarea-scale-increase",
+		MediaShowArea::instance()->scaleIncrease()
+	);
+	EASYQTCOMMAND_GEN_IMPL(
+		MediaShowAreaScaleDecreaseCommand, "mediashowarea-scale-decrease",
+		MediaShowArea::instance()->scaleDecrease()
+	);
+	EASYQTCOMMAND_GEN_IMPL(
+		MediaShowAreaScaleFitCommand, "mediashowarea-scale-fit",
+		MediaShowArea::instance()->scaleFit()
+	);
 	
 	void addCommands() {
-		easyqt::addCommand(MediaViewSelectAllCommand::instance());
-		easyqt::addCommand(MediaViewInvertSelectionCommand::instance());
+		easyqt::addCommands({
+			MediaViewSelectAllCommand::instance(),
+			MediaViewInvertSelectionCommand::instance(),
+			MediaShowAreaScaleIncreaseCommand::instance(),
+			MediaShowAreaScaleDecreaseCommand::instance(),
+			MediaShowAreaScaleFitCommand::instance(),
+		});
 	}
 }
 

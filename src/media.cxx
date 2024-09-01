@@ -1,6 +1,8 @@
 #include <easyqt/logging.hxx>
 #include <easyqt/utils.hxx>
 
+#include <exiv2/exiv2.hpp>
+
 #include "media.hxx"
 #include "thumbnailmanager.hxx"
 
@@ -48,6 +50,17 @@ namespace pelican {
 			v.push_back(path().concat(suffix));
 		}
 		return v;
+	}
+	
+	QSize Media::size(std::string suffix) {
+		Exiv2::Image::AutoPtr image;
+		try {
+			image = Exiv2::ImageFactory::open(path().concat(suffix));
+		} catch (Exiv2::BasicError<char>& e) {
+			LOG(ERROR, "Error opening file for getting pixel size: " << e.what());
+			return QSize();
+		}
+		return {image->pixelWidth(), image->pixelHeight()};
 	}
 }
 

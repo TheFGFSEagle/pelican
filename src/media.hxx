@@ -49,6 +49,8 @@ namespace pelican {
 			// @param preferred Which file extension is preferred - if available, the suffix for that extension will be returned.
 			// 	If @param preferred is empty or there is no suffix for that extension, the first available suffix will be returned
 			std::string suffix(std::string preferred = "");
+			
+			QSize size(std::string suffix);
 		
 		private:
 			std::filesystem::path _directory;
