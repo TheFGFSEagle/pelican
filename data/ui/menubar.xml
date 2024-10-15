@@ -39,7 +39,12 @@
 			<menuitem>
 				<label>Fit to screen</label>
 				<command>mediashowarea-scale-fit</command>
-				<shortcut>Ctrl+0</shortcut>
+				<shortcut>:</shortcut>
+			</menuitem>
+			<menuitem>
+				<label>Original size</label>
+				<command>mediashowarea-scale-original-size</command>
+				<shortcut>=</shortcut>
 			</menuitem>
 		</menu>
 	</menu> 
