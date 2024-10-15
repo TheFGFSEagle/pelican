@@ -20,6 +20,9 @@ target_include_directories(
 )
 target_link_libraries(
 	pelican
+	Qt::Concurrent
+	Qt::Core
+	Qt::Gui
 	Qt::Widgets
 	argparse
 	easyqt

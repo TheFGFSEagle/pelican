@@ -20,7 +20,7 @@ find_package(exiv2 REQUIRED)
 find_package(fmt REQUIRED)
 find_package(pystring REQUIRED)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Concurrent Core Gui Widgets REQUIRED)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(3rdparty)
