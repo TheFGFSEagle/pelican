@@ -113,7 +113,6 @@ namespace pelican {
 		setWidget(widget);
 		_rubberBand = new QRubberBand(QRubberBand::Rectangle, widget);
 		
-		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		setFocusPolicy(Qt::ClickFocus);
 	}
 	

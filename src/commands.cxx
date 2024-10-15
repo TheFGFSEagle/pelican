@@ -23,6 +23,10 @@ namespace pelican {
 		MediaShowAreaScaleFitCommand, "mediashowarea-scale-fit",
 		MediaShowArea::instance()->scaleFit()
 	);
+	EASYQTCOMMAND_GEN_IMPL(
+		MediaShowAreaScaleOriginalSizeCommand, "mediashowarea-scale-original-size",
+		MediaShowArea::instance()->scaleOriginalSize()
+	)
 	
 	void addCommands() {
 		easyqt::addCommands({
@@ -31,6 +35,7 @@ namespace pelican {
 			MediaShowAreaScaleIncreaseCommand::instance(),
 			MediaShowAreaScaleDecreaseCommand::instance(),
 			MediaShowAreaScaleFitCommand::instance(),
+			MediaShowAreaScaleOriginalSizeCommand::instance(),
 		});
 	}
 }

@@ -13,7 +13,7 @@
 								<bool>true</bool>
 							</property>
 						</widget>
-						<widget class="pelican::MediaShowArea">
+						<widget class="pelican::MediaShowArea" name="pelican::MediaShowArea">
 							<property name="widgetResizable">
 								<bool>true</bool>
 							</property>

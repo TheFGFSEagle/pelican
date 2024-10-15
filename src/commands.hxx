@@ -9,6 +9,7 @@ namespace pelican {
 	EASYQTCOMMAND_GEN_DEF(MediaShowAreaScaleIncreaseCommand);
 	EASYQTCOMMAND_GEN_DEF(MediaShowAreaScaleDecreaseCommand);
 	EASYQTCOMMAND_GEN_DEF(MediaShowAreaScaleFitCommand);
+	EASYQTCOMMAND_GEN_DEF(MediaShowAreaScaleOriginalSizeCommand);
 	
 	void addCommands();
 }
