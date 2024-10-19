@@ -76,6 +76,7 @@ namespace pelican {
 			MediaPtr _media;
 			QToolBar _toolBar;
 			QPushButton _scaleResetButton;
+			QAction _scaleDecreaseAction, _scaleIncreaseAction, _scaleFitAction, _scaleOriginalSizeAction;
 			QVBoxLayout _layout;
 			GraphicsView _view;
 	};

@@ -143,7 +143,14 @@ namespace pelican {
 		QGraphicsView::mouseMoveEvent(event);
 	}
 	
-	MediaShowArea::MediaShowArea(): _view(this) {
+	MediaShowArea::MediaShowArea():
+			_view(this),
+			_scaleDecreaseAction(QIcon::fromTheme("zoom-out"), "Zoom out"),
+			_scaleIncreaseAction(QIcon::fromTheme("zoom-in"), "Zoom in"),
+			_scaleFitAction(QIcon::fromTheme("zoom-fit-best"), "Fit in view"),
+			_scaleOriginalSizeAction(QIcon::fromTheme("zoom-original"), "Original size")
+	{
+	
 		setLayout(&_layout);
 		
 		_scaleResetButton.setFlat(true);
@@ -152,34 +159,40 @@ namespace pelican {
 			easyqt::getCommand("mediashowarea-scale-fit")->execute();
 		});
 		
-		QAction* scaleDecreaseAction = new QAction(QIcon::fromTheme("zoom-out"), "Zoom out");
-		QObject::connect(scaleDecreaseAction, &QAction::triggered, [this](bool checked) {
+		QObject::connect(&_scaleDecreaseAction, &QAction::triggered, [this](bool checked) {
 			easyqt::getCommand("mediashowarea-scale-decrease")->execute();
 		});
-		_toolBar.addAction(scaleDecreaseAction);
-		_toolBar.addWidget(&_scaleResetButton);
-		QAction* scaleIncreaseAction = new QAction(QIcon::fromTheme("zoom-in"), "Zoom in");
-		QObject::connect(scaleIncreaseAction, &QAction::triggered, [this](bool checked) {
+		QObject::connect(&_scaleIncreaseAction, &QAction::triggered, [this](bool checked) {
 			easyqt::getCommand("mediashowarea-scale-increase")->execute();
 		});
-		_toolBar.addAction(scaleIncreaseAction);
-		QAction* scaleFitAction = new QAction(QIcon::fromTheme("zoom-fit-best"), "Fit in view");
-		QObject::connect(scaleFitAction, &QAction::triggered, [this](bool checked) {
+		_toolBar.addAction(&_scaleDecreaseAction);
+		_toolBar.addWidget(&_scaleResetButton);
+		_toolBar.addAction(&_scaleIncreaseAction);
+		
+		QObject::connect(&_scaleFitAction, &QAction::triggered, [this](bool checked) {
 			easyqt::getCommand("mediashowarea-scale-fit")->execute();
 		});
-		_toolBar.addAction(scaleFitAction);
-		QAction* scaleOriginalSizeAction = new QAction(QIcon::fromTheme("zoom-original"), "Original size");
-		QObject::connect(scaleOriginalSizeAction, &QAction::triggered, [this](bool checked) {
+		_toolBar.addAction(&_scaleFitAction);
+		
+		QObject::connect(&_scaleOriginalSizeAction, &QAction::triggered, [this](bool checked) {
 			easyqt::getCommand("mediashowarea-scale-original-size")->execute();
 		});
-		_toolBar.addAction(scaleOriginalSizeAction);
+		_toolBar.addAction(&_scaleOriginalSizeAction);
 		
 		_layout.addWidget(&_toolBar);
 		_layout.addWidget(&_view);
 	}
 	
 	void MediaShowArea::setScaleInfo(double scale) {
-		_scaleResetButton.setText(fmt::format("   {:^ 3.0f} %   ", scale * 100).c_str());
+		_scaleResetButton.setText(fmt::format("   {: 4.0f} %   ", scale * 100).c_str());
+		if (scale == 0.01) {
+			_scaleDecreaseAction.setEnabled(false);
+		} else if (scale == 10) {
+			_scaleIncreaseAction.setEnabled(false);
+		} else {
+			_scaleDecreaseAction.setEnabled(true);
+			_scaleIncreaseAction.setEnabled(true);
+		}
 	}
 }
 
