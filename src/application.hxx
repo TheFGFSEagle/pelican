@@ -35,7 +35,7 @@ namespace pelican {
 		
 		private:
 			QFileSystemWatcher _mediaDirectoryWatcher;
-			std::filesystem::path _mediaDirectoryPath = {"/media/frederic/WD-5TB/Kamera/LumixG85/Fotos"};
+			std::filesystem::path _mediaDirectoryPath = {"/media/mama/WD-5TB/Kamera/LumixG85/Fotos"};
 			std::map<std::string, MediaPtr> _medias;
 	};
 }
