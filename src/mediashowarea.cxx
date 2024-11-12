@@ -23,8 +23,10 @@ namespace pelican {
 	void MediaShowArea::GraphicsView::setMedia(MediaPtr media) {
 		_media = media;
 		_imageItem->setPixmap(QPixmap());
-		QFuture<void> future = QtConcurrent::run(std::bind(&MediaShowArea::GraphicsView::loadMedia, this));
-		_mediaLoadWatcher.setFuture(future);
+		if (_media) {
+			QFuture<void> future = QtConcurrent::run(std::bind(&MediaShowArea::GraphicsView::loadMedia, this));
+			_mediaLoadWatcher.setFuture(future);
+		}
 	}
 	
 	void MediaShowArea::GraphicsView::loadMedia() {
