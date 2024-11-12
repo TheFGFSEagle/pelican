@@ -117,18 +117,25 @@ namespace pelican {
 	}
 	
 	void MediaView::rebuild() {
+		auto it = std::ranges::find(_mediaEntries, _selectionStartEntry);
+		int i = std::distance(_mediaEntries.begin(), it);
 		while (_layout.takeAt(0)) {
+			_mediaEntries.erase(_mediaEntries.begin() - 1);
 		}
-		for (MediaViewEntry* entry: _mediaEntries) {
-			delete entry;
-		}
-		_mediaEntries.clear();
 		
 		for (const auto& media: Application::instance()->medias()) {
 			MediaViewEntry* mediaEntry = new MediaViewEntry(media);
 			_mediaEntries.push_back(mediaEntry); 
 			_layout.addWidget(mediaEntry);
+			mediaEntry->show();
 		}
+		
+		if (i >= 0 and i < _mediaEntries.size()) {
+			selectEntry(_mediaEntries[i], ReplaceSelection);
+		} else {
+			clearSelection();
+		}
+		ensureWidgetVisible(_mediaEntries[i], 0, 0);
 	}
 	
 	QSize MediaView::sizeHint() const {
@@ -233,8 +240,12 @@ namespace pelican {
 		MediaInfoPane::instance()->setMedia(nullptr);
 	}
 	
-	QPoint MediaView::scrollPos() {
-		return QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value());
+	void MediaView::resizeEvent(QResizeEvent* event) {
+		easyqt::ScrollArea::resizeEvent(event);
+		
+		if (_selectionStartEntry) {
+			ensureWidgetVisible(_selectionStartEntry, 0, 0);
+		}
 	}
 	
 	void MediaView::mousePressEvent(QMouseEvent* event) {
@@ -347,6 +358,8 @@ namespace pelican {
 				for (const auto& entry: selected) {
 					entry->deleteFiles();
 				}
+				
+				MediaShowArea::instance()->setMedia(nullptr);
 			}
 		}
 
